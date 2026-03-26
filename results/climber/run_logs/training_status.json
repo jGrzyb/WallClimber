@@ -1,0 +1,65 @@
+{
+    "Climber": {
+        "checkpoints": [
+            {
+                "steps": 8499723,
+                "file_path": "results/climber/Climber/Climber-8499723.onnx",
+                "reward": 106.26821899414062,
+                "creation_time": 1774515675.1644692,
+                "auxillary_file_paths": [
+                    "results/climber/Climber/Climber-8499723.pt"
+                ]
+            },
+            {
+                "steps": 8999723,
+                "file_path": "results/climber/Climber/Climber-8999723.onnx",
+                "reward": 107.79055213928223,
+                "creation_time": 1774515928.4046156,
+                "auxillary_file_paths": [
+                    "results/climber/Climber/Climber-8999723.pt"
+                ]
+            },
+            {
+                "steps": 9499723,
+                "file_path": "results/climber/Climber/Climber-9499723.onnx",
+                "reward": 107.73261847862831,
+                "creation_time": 1774516233.6611042,
+                "auxillary_file_paths": [
+                    "results/climber/Climber/Climber-9499723.pt"
+                ]
+            },
+            {
+                "steps": 9999723,
+                "file_path": "results/climber/Climber/Climber-9999723.onnx",
+                "reward": 108.70040893554688,
+                "creation_time": 1774516545.1967916,
+                "auxillary_file_paths": [
+                    "results/climber/Climber/Climber-9999723.pt"
+                ]
+            },
+            {
+                "steps": 10000723,
+                "file_path": "results/climber/Climber/Climber-10000723.onnx",
+                "reward": 107.57337951660156,
+                "creation_time": 1774516545.3111846,
+                "auxillary_file_paths": [
+                    "results/climber/Climber/Climber-10000723.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10000723,
+            "file_path": "results/climber/Climber.onnx",
+            "reward": 107.57337951660156,
+            "creation_time": 1774516545.3111846,
+            "auxillary_file_paths": [
+                "results/climber/Climber/Climber-10000723.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.11.0+cu130"
+    }
+}

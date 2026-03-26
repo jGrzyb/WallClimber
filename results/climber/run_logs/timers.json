@@ -1,0 +1,47 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1774516576",
+        "python_version": "3.10.12 (main, Jul  5 2023, 18:54:27) [GCC 11.2.0]",
+        "command_line_arguments": "/home/jgrzyb/miniconda3/envs/mlagents/bin/mlagents-learn Assets/climber.yaml --run-id=climber --resume",
+        "mlagents_version": "1.1.0",
+        "mlagents_envs_version": "1.1.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.11.0+cu130",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1774516579"
+    },
+    "total": 3.0410833950008964,
+    "count": 1,
+    "self": 0.006355762001476251,
+    "children": {
+        "run_training.setup": {
+            "total": 0.022576184986974113,
+            "count": 1,
+            "self": 0.022576184986974113
+        },
+        "TrainerController.start_learning": {
+            "total": 3.012151448012446,
+            "count": 1,
+            "self": 0.0005988320044707507,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 3.0114898270112462,
+                    "count": 1,
+                    "self": 3.0114898270112462
+                },
+                "trainer_threads": {
+                    "total": 3.841996658593416e-06,
+                    "count": 1,
+                    "self": 3.841996658593416e-06
+                },
+                "TrainerController._save_models": {
+                    "total": 5.894700007047504e-05,
+                    "count": 1,
+                    "self": 5.894700007047504e-05
+                }
+            }
+        }
+    }
+}
