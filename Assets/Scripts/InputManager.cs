@@ -8,8 +8,8 @@ public class InputManager : MonoBehaviour
     public float ArmRight => -InputActions.Player.ArmRight.ReadValue<float>();
     public float ForearmLeft => InputActions.Player.ForearmLeft.ReadValue<float>();
     public float ForearmRight => -InputActions.Player.ForearmRight.ReadValue<float>();
-    public bool GripLeft => InputActions.Player.GripLeft.ReadValue<float>() > 0.5f;
-    public bool GripRight => InputActions.Player.GripRight.ReadValue<float>() > 0.5f;
+    public bool GripLeft => InputActions.Player.GripLeft.IsPressed();
+    public bool GripRight => InputActions.Player.GripRight.IsPressed();
     void Awake()
     {
         if (I != null && I != this) {

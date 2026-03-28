@@ -2,10 +2,15 @@ using UnityEngine;
 
 public class Arm : MonoBehaviour
 {
-    protected Rigidbody2D _rb;
-    public Rigidbody2D rb => _rb ??= GetComponent<Rigidbody2D>();
-    protected HingeJoint2D _armHinge;
-    public HingeJoint2D armHinge => _armHinge ??= GetComponents<HingeJoint2D>()[0];
+    public float Angle => armHinge.jointAngle;
+    public float MinAngle => armHinge.limits.min;
+    public float MaxAngle => armHinge.limits.max;
+    public float ReactionForce => armHinge.reactionForce.magnitude;
+
+    private Rigidbody2D _rb;
+    private Rigidbody2D rb => _rb ??= GetComponent<Rigidbody2D>();
+    private HingeJoint2D _armHinge;
+    private HingeJoint2D armHinge => _armHinge ??= GetComponent<HingeJoint2D>();
     private Vector3 initPos;
     private Quaternion initRot;
 
@@ -15,12 +20,11 @@ public class Arm : MonoBehaviour
     }
 
     public void SetMotor(float speed) {
-        armHinge.useMotor = true;
         JointMotor2D motor = armHinge.motor;
-        if (armHinge.jointAngle > armHinge.limits.max && speed > 0) {
+        if (Angle > MaxAngle - 1f && speed > 0) {
             motor.motorSpeed = 0; 
         } 
-        else if (armHinge.jointAngle < armHinge.limits.min && speed < 0) {
+        else if (Angle < MinAngle + 1f && speed < 0) {
             motor.motorSpeed = 0;
         }
         else {
