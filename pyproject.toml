@@ -3,5 +3,25 @@ name = "wallclimber"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+# Prefer 3.11 or 3.12 for mlagents: grpcio ships wheels for those; 3.13+ often forces a source build on Windows.
 requires-python = ">=3.11"
 dependencies = []
+
+[project.optional-dependencies]
+mlagents = [
+    "mlagents>=1.1.0",
+]
+
+# mlagents pins grpcio==1.48.2, which often has no Windows wheel → UV tries to compile from source
+# (slow, needs VS, and can hit setuptools/pkg_resources issues). Override to a grpcio with wheels.
+[tool.uv]
+override-dependencies = [
+    "grpcio>=1.60",
+    # ML-Agents imports pkg_resources; setuptools 82+ drops the top-level module ML-Agents expects.
+    "setuptools>=68,<81",
+]
+
+# If you ever must build grpcio from source, its legacy setup needs setuptools that still exposes pkg_resources:
+# `uv pip install ... --preview-features extra-build-dependencies`
+[tool.uv.extra-build-dependencies]
+grpcio = ["setuptools>=68,<81"]
