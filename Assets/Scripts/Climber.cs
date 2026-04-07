@@ -13,6 +13,8 @@ public class Climber : Agent
     [SerializeField] private Arm rightArm;
     [SerializeField] private Forearm leftForearm;
     [SerializeField] private Forearm rightForearm;
+    [Space]
+    [SerializeField] private ClimberVision vision;
     private Rigidbody2D rb;
     private Vector3 initPos;
     private Quaternion initRot;
@@ -26,9 +28,11 @@ public class Climber : Agent
         rb = GetComponent<Rigidbody2D>();
         initPos = transform.localPosition;
         initRot = transform.localRotation;
+        if (vision == null) vision = GetComponent<ClimberVision>();
     }
 
     public override void CollectObservations(VectorSensor sensor) {
+        // Proprioception: 10 values
         sensor.AddObservation(leftArm.Angle);
         sensor.AddObservation(rightArm.Angle);
         sensor.AddObservation(leftForearm.Angle);
@@ -38,6 +42,9 @@ public class Climber : Agent
         sensor.AddObservation(rb.linearVelocity);
         sensor.AddObservation(rb.angularVelocity);
         sensor.AddObservation(transform.rotation.eulerAngles.z);
+
+        // Vision: rayCount values (default 32 → total 42)
+        vision.CollectVisionObservations(sensor);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {

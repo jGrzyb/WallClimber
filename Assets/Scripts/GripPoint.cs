@@ -15,6 +15,9 @@ public class GripPoint : MonoBehaviour
 
     static readonly List<GripPoint> Active = new();
 
+    /// <summary>Read-only view of all currently enabled grip points (used by ClimberVision).</summary>
+    public static IReadOnlyList<GripPoint> ActiveGrips => Active;
+
     public static bool TryFindBestForHand(Vector2 handWorld, out GripPoint best)
     {
         best = null;
