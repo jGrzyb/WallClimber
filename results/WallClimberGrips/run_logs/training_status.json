@@ -1,4 +1,26 @@
 {
+    "Climber": {
+        "checkpoints": [
+            {
+                "steps": 1718,
+                "file_path": "results\\WallClimberGrips\\Climber\\Climber-1718.onnx",
+                "reward": -0.8293454721570015,
+                "creation_time": 1775631510.0639958,
+                "auxillary_file_paths": [
+                    "results\\WallClimberGrips\\Climber\\Climber-1718.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1718,
+            "file_path": "results\\WallClimberGrips\\Climber.onnx",
+            "reward": -0.8293454721570015,
+            "creation_time": 1775631510.0639958,
+            "auxillary_file_paths": [
+                "results\\WallClimberGrips\\Climber\\Climber-1718.pt"
+            ]
+        }
+    },
     "metadata": {
         "stats_format_version": "0.3.0",
         "mlagents_version": "1.1.0",
