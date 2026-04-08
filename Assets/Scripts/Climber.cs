@@ -61,6 +61,7 @@ public class Climber : Agent
         rightForearm.SetGrip(actions.DiscreteActions[1] == 1);
 
         HandleReward();
+        RecordStats();
         HandleLogging();
     }
 
@@ -122,6 +123,16 @@ public class Climber : Agent
         //     AddReward(-angleDiff * 1e-2f);
         //     // Debug.Log($"Right arm angle {angleDiff}");
         // }
+    }
+
+    private void RecordStats() {
+        var stats = Academy.Instance.StatsRecorder;
+        stats.Add("Climber/Height",        transform.position.y);
+        stats.Add("Climber/VelocityY",     rb.linearVelocityY);
+        stats.Add("Climber/VelocityX",     rb.linearVelocityX);
+        stats.Add("Climber/Strain",        strain);
+        stats.Add("Climber/GrippingLeft",  leftForearm.IsGripping  ? 1f : 0f);
+        stats.Add("Climber/GrippingRight", rightForearm.IsGripping ? 1f : 0f);
     }
 
     private void HandleLogging() {
