@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 458427530199788370}
   - component: {fileID: 5384799829403519413}
   - component: {fileID: 5683054989864344176}
+  - component: {fileID: 9901234567890123}
   m_Layer: 6
   m_Name: Climber
   m_TagString: Untagged
@@ -148,7 +149,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Unity.ML-Agents::Unity.MLAgents.Policies.BehaviorParameters
   m_BrainParameters:
-    VectorObservationSize: 10
+    VectorObservationSize: 42
     NumStackedVectorObservations: 1
     m_ActionSpec:
       m_NumContinuousActions: 4
@@ -690,3 +691,18 @@ Rigidbody2D:
   m_CorrespondingSourceObject: {fileID: 623687393354975189, guid: a09d3ec3951508e7dad18c5eacdb6bcf, type: 3}
   m_PrefabInstance: {fileID: 8172384247830817228}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9901234567890123
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 48011006810450008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b1c2d3e4f5a64b8c90d1e2f3a4b5c6d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ClimberVision
+  rayCount: 32
+  viewRange: 4.5
+  showBinDividers: 1

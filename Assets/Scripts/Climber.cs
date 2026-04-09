@@ -13,9 +13,15 @@ public class Climber : Agent
     [SerializeField] private Arm rightArm;
     [SerializeField] private Forearm leftForearm;
     [SerializeField] private Forearm rightForearm;
+    [Space]
+    [SerializeField] private ClimberVision vision;
+    [Space]
+    [SerializeField] private int logInterval = 1000;
+    [SerializeField] private int totalTrainingSteps = 10_000_000;
     private Rigidbody2D rb;
     private Vector3 initPos;
     private Quaternion initRot;
+    private long _lastLogStep = -1;
     private float strain => 
         leftArm.ReactionForce + 
         rightArm.ReactionForce + 
@@ -26,9 +32,11 @@ public class Climber : Agent
         rb = GetComponent<Rigidbody2D>();
         initPos = transform.localPosition;
         initRot = transform.localRotation;
+        if (vision == null) vision = GetComponent<ClimberVision>();
     }
 
     public override void CollectObservations(VectorSensor sensor) {
+        // Proprioception: 10 values
         sensor.AddObservation(leftArm.Angle);
         sensor.AddObservation(rightArm.Angle);
         sensor.AddObservation(leftForearm.Angle);
@@ -38,6 +46,9 @@ public class Climber : Agent
         sensor.AddObservation(rb.linearVelocity);
         sensor.AddObservation(rb.angularVelocity);
         sensor.AddObservation(transform.rotation.eulerAngles.z);
+
+        // Vision: rayCount values (default 32 → total 42)
+        vision.CollectVisionObservations(sensor);
     }
 
     public override void OnActionReceived(ActionBuffers actions) {
@@ -50,6 +61,7 @@ public class Climber : Agent
         rightForearm.SetGrip(actions.DiscreteActions[1] == 1);
 
         HandleReward();
+        RecordStats();
         HandleLogging();
     }
 
@@ -113,7 +125,22 @@ public class Climber : Agent
         // }
     }
 
+    private void RecordStats() {
+        var stats = Academy.Instance.StatsRecorder;
+        stats.Add("Climber/Height",        transform.position.y);
+        stats.Add("Climber/VelocityY",     rb.linearVelocityY);
+        stats.Add("Climber/VelocityX",     rb.linearVelocityX);
+        stats.Add("Climber/Strain",        strain);
+        stats.Add("Climber/GrippingLeft",  leftForearm.IsGripping  ? 1f : 0f);
+        stats.Add("Climber/GrippingRight", rightForearm.IsGripping ? 1f : 0f);
+    }
+
     private void HandleLogging() {
+        var step = Academy.Instance.TotalStepCount;
+        if (step - _lastLogStep < logInterval) return;
+        _lastLogStep = step;
+        var pct = totalTrainingSteps > 0 ? 100f * step / totalTrainingSteps : 0f;
+        Debug.Log($"[Climber] Step {step:N0} / {totalTrainingSteps:N0}  ({pct:F2}%)  |  Episode {CompletedEpisodes}  |  Reward {GetCumulativeReward():F4}");
     }
 
     private void Reset() {
