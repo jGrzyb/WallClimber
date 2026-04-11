@@ -12,6 +12,9 @@ mlagents = [
     "mlagents>=1.1.0",
 ]
 
+[project.entry-points."mlagents.trainer_type"]
+custom = "custom_trainer:get_custom_trainer_types"
+
 # mlagents pins grpcio==1.48.2, which often has no Windows wheel → UV tries to compile from source
 # (slow, needs VS, and can hit setuptools/pkg_resources issues). Override to a grpcio with wheels.
 [tool.uv]

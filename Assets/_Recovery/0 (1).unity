@@ -301,10 +301,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2f3a4b5c6d7488990ab1c2d3e4f5061, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GripGridPlacer
-  columns: 16
-  rows: 40
-  cellSpacing: {x: 2, y: 2}
-  gridOrigin: {x: -16, y: 0, z: 0}
+  columns: 100
+  rows: 100
+  cellSpacing: {x: 3, y: 3}
+  gridOrigin: {x: -150, y: 0, z: 0}
   circleRadius: 0.2
   circleSprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   sortingOrder: 5
