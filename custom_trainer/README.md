@@ -239,6 +239,33 @@ vectors (e.g. radar-style distance bins that wrap around 360°).
 - The spatial pooling to 4 bins preserves coarse directional information while
   keeping the parameter count low.
 
+## Parallel training (WallClimber)
+
+The WallClimber project trains **four** agents in parallel by default:
+
+- **Python** (`Assets/climber.yaml`, `Assets/climber_custom.yaml`): `env_settings`
+  with `num_areas: 4` and `num_envs: 1`.  When `env_path` is `null` (training
+  from the Unity Editor), ML-Agents **requires** `num_envs: 1`; multi-process
+  parallelism uses `num_envs` with a **built executable** instead.
+- **Unity layout** (`Assets/Scripts/WallClimberParallelTrainingBootstrap.cs` +
+  `WallClimberHorizontalAreaReplicator.cs`): groups `Ground`, `GripGrid`,
+  `Climber`, and `Square` under a `TrainingArea` root and duplicates that root
+  along **+X** (side-by-side), not a 2×2 grid.  Keep `num_areas` in YAML aligned
+  with `WallClimberParallelTrainingBootstrap.DefaultNumAreas`.
+- **Camera** (`Assets/Scripts/MyCamera.cs`): the training scene
+  `Assets/Scenes/WallClimberGrips.unity` overrides the Main Camera prefab to
+  `WallClimberCameraMode.StaticTrainingOverview` so the orthographic view stays
+  fixed and frames every climber.  Adjust `framingPadding` on the camera if the
+  edges are tight.
+- **Inference** (`Assets/Scenes/WallClimberInference.unity`): separate scene with
+  an `InferenceSceneRoot` carrying `WallClimberInferenceScene` so parallel
+  bootstrap is **not** auto-created; the camera uses **FollowAgent** (prefab
+  default).  Open this scene for play-mode inference / heuristics with a single
+  agent and follow camera.
+
+If you change the number of areas, update **both** the YAML and the C# default
+(or a scene-placed instance of the bootstrap component).
+
 ## Compatibility
 
 - **Python**: 3.11+ (matches the project's `.python-version`)

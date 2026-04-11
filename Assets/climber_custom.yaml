@@ -3,6 +3,24 @@
 #
 # Usage:
 #   python train.py Assets/climber_custom.yaml --run-id=CustomClimber
+#
+# Parallel training: num_areas must match WallClimberParallelTrainingBootstrap.DefaultNumAreas
+# (and the component's numAreas in the Inspector if overridden). With env_path: null (Editor),
+# num_envs must stay 1. For a built executable, you can use num_envs: 4 instead of/in addition
+# to num_areas — see ML-Agents docs.
+
+env_settings:
+  env_path: build/
+  num_envs: 4
+  num_areas: 1
+  # Optional: extra Unity CLI args (windowed + size). Uncomment if Player Settings defaults are wrong:
+  # env_args:
+  #   - -screen-fullscreen
+  #   - "0"
+  #   - -screen-width
+  #   - "1600"
+  #   - -screen-height
+  #   - "900"
 
 behaviors:
   Climber:

@@ -22,6 +22,7 @@ public class Climber : Agent
     private Vector3 initPos;
     private Quaternion initRot;
     private long _lastLogStep = -1;
+
     private float strain => 
         leftArm.ReactionForce + 
         rightArm.ReactionForce + 
