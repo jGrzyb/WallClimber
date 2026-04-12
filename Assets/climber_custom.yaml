@@ -1,17 +1,61 @@
 # Training configuration using the custom_ppo trainer with split observation
-# encoders.  The Conv1D vision encoder is described in climber_encoder.yaml.
+# encoders. The Conv1D vision encoder is described in climber_encoder.yaml.
 #
-# Usage:
+# Usage (from project root):
 #   python train.py Assets/climber_custom.yaml --run-id=CustomClimber
+#   python train.py Assets/climber_custom.yaml --run-id=CustomClimber2 --force
 #
-# Parallel training: num_areas must match WallClimberParallelTrainingBootstrap.DefaultNumAreas
-# (and the component's numAreas in the Inspector if overridden). With env_path: null (Editor),
-# num_envs must stay 1. For a built executable, you can use num_envs: 4 instead of/in addition
-# to num_areas — see ML-Agents docs.
+# This file is what you edit. results/<run-id>/configuration.yaml is a snapshot written
+# after training; it does not drive the next run.
+#
+# env_settings.num_areas is sent to Unity at handshake (Academy.NumAreas). Bootstrap
+# DefaultNumAreas is only a fallback when no Python trainer is attached.
+# With env_path: null (Editor), num_envs must stay 1. For a built executable you can raise
+# num_envs and/or num_areas — see ML-Agents docs.
+#
+# environment_parameters: sent to Unity (floats). Climber applies decision_* / agent_max_step
+# to DecisionRequester + Agent — overrides prefab when training; Play without trainer uses Inspector.
+
+# --- Train-script settings (consumed by train.py, not sent to mlagents-learn as YAML) ---
+train_settings:
+  # Warm-start from a previous run. Accepts either:
+  #   - A run-id string, e.g. "CustomClimber"  (must have results/<run-id>/<behavior>/checkpoint.pt)
+  #   - A path to a .onnx or .pt file, e.g. "results/CustomClimber/Climber/Climber-100500.onnx"
+  #     The corresponding .pt file is located automatically and the run-id is inferred.
+  # Leave empty ("") to start fresh.
+  initialize_from: "results/CustomClimber4LimbsPosition/Climber.onnx"
+  # PyTorch device override. Leave empty ("") for auto-detect (cuda if available, else cpu).
+  # Examples: "cpu", "cuda", "cuda:0"
+  device: "cuda"
+
+environment_parameters:
+  # --- Agent timing ---
+  decision_period: 2 # Academy steps between policy calls (1 = every step)
+  decision_step: 0 # Phase offset within decision_period cycle
+  take_actions_between_decisions: 1 # 1 = repeat last action between decisions
+  agent_max_step: 10000 # Episode length cap (steps)
+
+  # --- Motor ---
+  motor_multiplier: 200 # Scales [-1,1] action -> motor speed
+  # max_motor_force: set per-joint in the HingeJoint2D Inspector (not a runtime param)
+
+  # --- Reward shaping ---
+  strain_threshold: 5000 # Sum of joint reaction forces above which penalty kicks in
+  strain_penalty_scale: 0.00001 # Penalty per unit excess strain per step
+  fall_y_threshold: -5 # Y position below which the agent is considered fallen
+  fall_penalty: 1.0 # Negative reward applied on fall
+
+  # --- Reward mode ---
+  # 0 = velocity  : reward += linearVelocityY * velocity_reward_scale  (default)
+  # 1 = position  : reward += clamp(position.y, 0, height_cap) * position_reward_scale
+  reward_mode: 1
+  velocity_reward_scale: 0.001 # Scale for velocity-based reward (mode 0)
+  position_reward_scale: 0.001 # Scale for position-based reward (mode 1)
+  position_height_cap: 200 # Y position clamped to this before scaling (mode 1)
 
 env_settings:
-  env_path: build/
-  num_envs: 4
+  env_path: null # build/
+  num_envs: 1
   num_areas: 1
   # Optional: extra Unity CLI args (windowed + size). Uncomment if Player Settings defaults are wrong:
   # env_args:
@@ -26,13 +70,13 @@ behaviors:
   Climber:
     trainer_type: custom_ppo
     hyperparameters:
-      batch_size: 2048
-      buffer_size: 20480
-      learning_rate: 0.0003
+      batch_size: 1024
+      buffer_size: 8192
+      learning_rate: 0.001
       beta: 0.005
       epsilon: 0.2
       lambd: 0.95
-      num_epoch: 3
+      num_epoch: 5
       learning_rate_schedule: linear
       encoder_config: Assets/climber_encoder.yaml
     network_settings:
@@ -44,6 +88,6 @@ behaviors:
         gamma: 0.995
         strength: 1.0
     keep_checkpoints: 5
-    max_steps: 10000000
+    max_steps: 1000000
     time_horizon: 1000
-    summary_freq: 30000
+    summary_freq: 1000

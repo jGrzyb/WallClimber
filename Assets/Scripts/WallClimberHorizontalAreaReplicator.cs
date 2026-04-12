@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.MLAgents;
 using UnityEngine;
 
@@ -19,22 +20,48 @@ public class WallClimberHorizontalAreaReplicator : MonoBehaviour
 
     void Awake()
     {
-        // ML-Agents 4.x: use IsCommunicatorOn (Communicator was removed from the public API).
-        if (Academy.Instance != null && Academy.Instance.IsCommunicatorOn)
-            numAreas = Academy.Instance.NumAreas;
-
         if (baseArea != null)
             m_TrainingAreaName = baseArea.name;
     }
 
-    void OnEnable()
+    /// <summary>
+    /// Replication must run after the Python trainer connects; in <see cref="Awake"/> /
+    /// <see cref="OnEnable"/>, <see cref="Academy.Instance.IsCommunicatorOn"/> is usually still false,
+    /// so YAML <c>env_settings.num_areas</c> was never applied and the bootstrap default (previously 4)
+    /// stuck.
+    /// </summary>
+    IEnumerator Start()
     {
+        // Wait until the communicator is up so Academy.NumAreas matches env_settings.num_areas.
+        var frame = 0;
+        while (Academy.Instance != null)
+        {
+            if (Academy.Instance.IsCommunicatorOn)
+            {
+                numAreas = Mathf.Max(1, Academy.Instance.NumAreas);
+                break;
+            }
+
+#if UNITY_EDITOR
+            // Play Mode without mlagents-learn: communicator never connects; don't block long.
+            if (frame++ >= 120)
+                break;
+#else
+            if (frame++ >= 6000)
+                break;
+#endif
+            yield return null;
+        }
+
+        if (Academy.Instance != null && Academy.Instance.IsCommunicatorOn)
+            numAreas = Mathf.Max(1, Academy.Instance.NumAreas);
+
         if (buildOnly)
         {
 #if UNITY_STANDALONE && !UNITY_EDITOR
             AddEnvironments();
 #endif
-            return;
+            yield break;
         }
 
         AddEnvironments();

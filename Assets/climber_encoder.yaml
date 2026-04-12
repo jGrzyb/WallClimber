@@ -1,37 +1,32 @@
-# Encoder configuration for the WallClimber Climber agent.
+# Encoder configuration for the WallClimber Climber agent (4 limbs: arms + legs).
 #
-# The agent's single vector observation has 42 floats laid out as:
+# Observation layout for N=4 limbs (total 48 floats):
 #
 #   Index   Observation                  Source
 #   ─────   ──────────────────────────   ──────────────────
-#   0       left arm angle               Climber.cs
-#   1       right arm angle              Climber.cs
-#   2       left forearm angle           Climber.cs
-#   3       right forearm angle          Climber.cs
-#   4       left forearm gripping (0/1)  Climber.cs
-#   5       right forearm gripping (0/1) Climber.cs
-#   6-7     body linear velocity (x,y)  Climber.cs
-#   8       body angular velocity        Climber.cs
-#   9       body rotation z              Climber.cs
-#   10-41   vision bins (32)             ClimberVision.cs
+#   0-3     arm/leg angles               Climber.cs
+#   4-7     forearm/foot angles          Climber.cs
+#   8-11    grip states (0/1)            Climber.cs
+#   12-13   body linear velocity (x,y)   Climber.cs
+#   14      body angular velocity        Climber.cs
+#   15      body rotation z              Climber.cs
+#   16-47   vision bins (32)             ClimberVision.cs
 #
-# Proprioception is processed with a standard linear encoder
-# (with running-mean normalisation).
-#
-# Vision bins are processed with a 1-D circular convolution that respects
-# the wrap-around nature of the 360° angular layout.
+# Proprioception (indices 0-15) is encoded with a linear encoder and
+# running-mean normalisation. Vision (indices 16-47) uses a 1-D circular
+# convolution over the 360° angular layout.
 
 obs_index: 0
 
 splits:
   - name: proprioception
     start: 0
-    size: 10
+    size: 16
     encoder: linear
     normalize: true
 
   - name: vision
-    start: 10
+    start: 16
     size: 32
     encoder: conv1d
     normalize: false

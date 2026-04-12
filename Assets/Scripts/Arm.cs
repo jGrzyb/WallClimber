@@ -21,15 +21,12 @@ public class Arm : MonoBehaviour
 
     public void SetMotor(float speed) {
         JointMotor2D motor = armHinge.motor;
-        if (Angle > MaxAngle - 1f && speed > 0) {
-            motor.motorSpeed = 0; 
-        } 
-        else if (Angle < MinAngle + 1f && speed < 0) {
+        if (Angle > MaxAngle - 1f && speed > 0)
             motor.motorSpeed = 0;
-        }
-        else {
+        else if (Angle < MinAngle + 1f && speed < 0)
+            motor.motorSpeed = 0;
+        else
             motor.motorSpeed = speed;
-        }
         armHinge.motor = motor;
     }
 

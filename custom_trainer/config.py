@@ -8,6 +8,7 @@ split into named slices, each handled by a particular encoder type.
 from __future__ import annotations
 
 from dataclasses import dataclass, field
+from pathlib import Path
 from typing import Any, Dict, List
 
 import yaml
@@ -68,7 +69,16 @@ class EncoderConfig:
 
     @classmethod
     def from_yaml(cls, path: str) -> EncoderConfig:
-        with open(path) as f:
+        p = Path(path)
+        if not p.is_file():
+            alt = Path.cwd() / path
+            if alt.is_file():
+                p = alt
+            else:
+                raise FileNotFoundError(
+                    f"encoder_config not found: {path!r} (cwd={Path.cwd()})"
+                )
+        with open(p, encoding="utf-8") as f:
             data = yaml.safe_load(f)
 
         raw_list = data.get("encoders", [data])

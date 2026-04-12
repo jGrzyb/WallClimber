@@ -3,13 +3,13 @@ behaviors:
   Climber:
     trainer_type: custom_ppo
     hyperparameters:
-      batch_size: 2048
-      buffer_size: 20480
-      learning_rate: 0.0003
+      batch_size: 1024
+      buffer_size: 8192
+      learning_rate: 0.001
       beta: 0.005
       epsilon: 0.2
       lambd: 0.95
-      num_epoch: 3
+      num_epoch: 5
       shared_critic: false
       learning_rate_schedule: linear
       beta_schedule: linear
@@ -39,17 +39,17 @@ behaviors:
     init_path: null
     keep_checkpoints: 5
     even_checkpoints: false
-    max_steps: 10000000
+    max_steps: 500000
     time_horizon: 1000
-    summary_freq: 30000
+    summary_freq: 1000
     threaded: false
     self_play: null
     behavioral_cloning: null
 env_settings:
-  env_path: build/
+  env_path: null
   env_args: null
   base_port: 5005
-  num_envs: 4
+  num_envs: 1
   num_areas: 1
   timeout_wait: 60
   seed: -1
@@ -65,7 +65,88 @@ engine_settings:
   capture_frame_rate: 60
   no_graphics: false
   no_graphics_monitor: false
-environment_parameters: null
+environment_parameters:
+  decision_period:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2640
+          value: 2
+      name: decision_period
+      completion_criteria: null
+  decision_step:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2641
+          value: 0
+      name: decision_step
+      completion_criteria: null
+  take_actions_between_decisions:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2642
+          value: 1
+      name: take_actions_between_decisions
+      completion_criteria: null
+  agent_max_step:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2643
+          value: 10000
+      name: agent_max_step
+      completion_criteria: null
+  motor_multiplier:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2644
+          value: 100
+      name: motor_multiplier
+      completion_criteria: null
+  strain_threshold:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2645
+          value: 5000
+      name: strain_threshold
+      completion_criteria: null
+  strain_penalty_scale:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2646
+          value: 1.0e-05
+      name: strain_penalty_scale
+      completion_criteria: null
+  fall_y_threshold:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2647
+          value: -5
+      name: fall_y_threshold
+      completion_criteria: null
+  fall_penalty:
+    curriculum:
+    - value:
+        sampler_type: constant
+        sampler_parameters:
+          seed: 2648
+          value: 1.0
+      name: fall_penalty
+      completion_criteria: null
 checkpoint_settings:
   run_id: CustomClimber
   initialize_from: null
