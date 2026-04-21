@@ -3,7 +3,10 @@ revision = 3
 requires-python = ">=3.11"
 
 [manifest]
-overrides = [{ name = "grpcio", specifier = ">=1.60" }]
+overrides = [
+    { name = "grpcio", specifier = ">=1.60" },
+    { name = "setuptools", specifier = ">=68,<81" },
+]
 
 [[package]]
 name = "absl-py"
@@ -1168,10 +1171,14 @@ source = { virtual = "." }
 [package.optional-dependencies]
 mlagents = [
     { name = "mlagents" },
+    { name = "tqdm" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "mlagents", marker = "extra == 'mlagents'", specifier = ">=1.1.0" }]
+requires-dist = [
+    { name = "mlagents", marker = "extra == 'mlagents'", specifier = ">=1.1.0" },
+    { name = "tqdm", marker = "extra == 'mlagents'", specifier = ">=4.66" },
+]
 provides-extras = ["mlagents"]
 
 [[package]]

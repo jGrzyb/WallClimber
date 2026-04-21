@@ -1,3 +1,10 @@
+# Parallel training: keep num_areas in sync with Assets/Scripts/WallClimberParallelTrainingBootstrap.cs
+# (DefaultNumAreas). Editor training requires num_envs: 1 when env_path is null.
+
+env_settings:
+  num_envs: 1
+  num_areas: 4
+
 behaviors:
   Climber:
     trainer_type: ppo
