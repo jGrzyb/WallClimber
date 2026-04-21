@@ -82,8 +82,13 @@ def _resolve_initialize_from(value: str) -> tuple[str, str]:
         "CustomClimber"  →  run_id="CustomClimber"
     - A path to a ``.onnx`` or ``.pt`` file:
         "results/CustomClimber/Climber/Climber-100500.onnx"
+        "results/CustomClimber/Climber.onnx"   ← run-root ONNX also supported
         The corresponding ``.pt`` checkpoint is located and the run-id is
         inferred from the path structure ``results/<run-id>/…``.
+
+    ML-Agents resolves ``--initialize-from=<run_id>`` by loading
+    ``results/<run_id>/<behavior>/checkpoint.pt``.  This function verifies
+    that checkpoint actually exists before injecting the flag.
     """
     p = Path(value)
 
@@ -97,41 +102,61 @@ def _resolve_initialize_from(value: str) -> tuple[str, str]:
 
     if not p.exists():
         raise FileNotFoundError(
-            f"[train] initialize_from: file not found: {p}\n"
+            f"initialize_from: file not found: {p}\n"
             f"  Make sure the path is correct (relative to the project root)."
         )
 
-    # For .onnx: find the companion .pt checkpoint.
-    if p.suffix == ".onnx":
-        # Try <same stem>.pt in the same directory.
-        pt = p.with_suffix(".pt")
-        if not pt.exists():
-            # Try checkpoint.pt in the same directory (most-recent checkpoint).
-            pt = p.parent / "checkpoint.pt"
-        if not pt.exists():
-            raise FileNotFoundError(
-                f"[train] initialize_from: could not find a .pt checkpoint alongside {p}\n"
-                f"  Expected {p.with_suffix('.pt')} or {p.parent / 'checkpoint.pt'}"
-            )
-    else:
-        pt = p
-
     # Infer run-id from path: look for a "results" ancestor.
-    parts = pt.parts
-    run_id = None
+    parts = p.parts
+    run_id: str | None = None
+    results_idx: int | None = None
     for i, part in enumerate(parts):
         if part.lower() == "results" and i + 1 < len(parts):
             run_id = parts[i + 1]
+            results_idx = i
             break
 
     if run_id is None:
         raise ValueError(
-            f"[train] initialize_from: could not infer run-id from path: {pt}\n"
+            f"initialize_from: could not infer run-id from path: {p}\n"
             f"  Path must be under a 'results/<run-id>/' directory,\n"
             f"  or specify the run-id directly (e.g. initialize_from: CustomClimber)."
         )
 
-    return run_id, f"'{value}' → run-id '{run_id}' (checkpoint: {pt.name})"
+    # Locate the actual .pt checkpoint that ML-Agents will need.
+    # ML-Agents loads:  results/<run-id>/<behavior>/checkpoint.pt
+    # Search order (most-specific first):
+    #   1. <same dir>/<same stem>.pt          e.g. results/R/Climber/Climber-N.pt
+    #   2. <same dir>/checkpoint.pt           e.g. results/R/Climber/checkpoint.pt
+    #   3. <parent>/<stem>/checkpoint.pt      e.g. results/R/Climber/checkpoint.pt
+    #      (covers the case where the user points at the run-root ONNX)
+    candidates: list[Path] = []
+    if p.suffix == ".onnx":
+        candidates.append(p.with_suffix(".pt"))
+        candidates.append(p.parent / "checkpoint.pt")
+        # Run-root ONNX: stem is the behavior name → results/<run-id>/<stem>/checkpoint.pt
+        candidates.append(p.parent / p.stem / "checkpoint.pt")
+    else:
+        candidates.append(p)
+        candidates.append(p.parent / "checkpoint.pt")
+
+    pt: Path | None = next((c for c in candidates if c.exists()), None)
+    if pt is None:
+        searched = "\n    ".join(str(c) for c in candidates)
+        raise FileNotFoundError(
+            f"initialize_from: could not find a .pt checkpoint for '{value}'.\n"
+            f"  Searched:\n    {searched}\n"
+            f"  Tip: pass a bare run-id (e.g. initialize_from: {run_id}) and make sure\n"
+            f"  results/{run_id}/<behavior>/checkpoint.pt exists."
+        )
+
+    # Make the checkpoint path relative to cwd for readability.
+    try:
+        pt_display = pt.relative_to(Path.cwd())
+    except ValueError:
+        pt_display = pt
+
+    return run_id, f"run-id '{run_id}'  (checkpoint: {pt_display})"
 
 
 def _apply_train_settings(cfg: dict) -> None:
@@ -144,39 +169,61 @@ def _apply_train_settings(cfg: dict) -> None:
     # --initialize-from
     init_from = str(ts.get("initialize_from") or "").strip()
     if init_from:
-        # Don't add if the user already passed --initialize-from on the CLI.
         if not any(a.startswith("--initialize-from") for a in sys.argv):
             try:
                 run_id, desc = _resolve_initialize_from(init_from)
                 sys.argv.append(f"--initialize-from={run_id}")
-                print(f"[train] Warm-starting from {desc}", file=sys.stderr)
+                _banner(
+                    f"WARM-START ENABLED\n"
+                    f"  initialize_from : {init_from}\n"
+                    f"  --initialize-from={run_id}\n"
+                    f"  checkpoint      : {desc}\n"
+                    f"  ML-Agents will copy weights from that checkpoint into\n"
+                    f"  the new run before the first gradient update.\n"
+                    f"  NOTE: step counter resets to 0 (use --resume to continue)."
+                )
             except (FileNotFoundError, ValueError) as exc:
-                print(f"[train] WARNING: {exc}", file=sys.stderr)
+                _banner(
+                    f"WARNING: initialize_from SKIPPED\n"
+                    f"  {exc}\n"
+                    f"  Training will start from random weights.",
+                    border="!",
+                )
         else:
             print(
-                "[train] --initialize-from already in argv; train_settings.initialize_from ignored.",
-                file=sys.stderr,
+                "[train] --initialize-from already in argv; train_settings.initialize_from ignored."
             )
+    else:
+        print("[train] initialize_from: not set — training from random weights.")
 
     # --torch-device
     device = str(ts.get("device") or "").strip()
     if device:
         if not any(a.startswith("--torch-device") for a in sys.argv):
             sys.argv.append(f"--torch-device={device}")
-            print(f"[train] PyTorch device (from train_settings.device): {device}", file=sys.stderr)
+            print(f"[train] PyTorch device (from yaml train_settings.device): {device}")
         else:
             print(
-                "[train] --torch-device already in argv; train_settings.device ignored.",
-                file=sys.stderr,
+                "[train] --torch-device already in argv; train_settings.device ignored."
             )
     else:
-        # Auto-detect and print what ML-Agents will choose.
         try:
             from mlagents.torch_utils import torch  # noqa: PLC0415
             auto = "cuda" if torch.cuda.is_available() else "cpu"
-            print(f"[train] PyTorch device (auto-detect): {auto}", file=sys.stderr)
+            print(f"[train] PyTorch device (auto-detect): {auto}")
         except ImportError:
             pass
+
+
+def _banner(msg: str, border: str = "=") -> None:
+    """Print a prominent bordered message to stdout."""
+    lines = msg.splitlines()
+    width = max(len(l) for l in lines) + 4
+    bar = border * width
+    print(bar)
+    for line in lines:
+        print(f"  {line}")
+    print(bar)
 
 
 # ------------------------------------------------------------------ #

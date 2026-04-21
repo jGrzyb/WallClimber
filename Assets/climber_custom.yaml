@@ -23,7 +23,7 @@ train_settings:
   #   - A path to a .onnx or .pt file, e.g. "results/CustomClimber/Climber/Climber-100500.onnx"
   #     The corresponding .pt file is located automatically and the run-id is inferred.
   # Leave empty ("") to start fresh.
-  initialize_from: "results/CustomClimber4LimbsPosition/Climber.onnx"
+  initialize_from: "results/CustomClimber4LimbsPosition2/Climber.onnx"
   # PyTorch device override. Leave empty ("") for auto-detect (cuda if available, else cpu).
   # Examples: "cpu", "cuda", "cuda:0"
   device: "cuda"
@@ -88,6 +88,6 @@ behaviors:
         gamma: 0.995
         strength: 1.0
     keep_checkpoints: 5
-    max_steps: 1000000
+    max_steps: 2000000
     time_horizon: 1000
     summary_freq: 1000
