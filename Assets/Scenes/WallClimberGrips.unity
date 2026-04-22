@@ -2428,7 +2428,7 @@ MonoBehaviour:
   columns: 64
   rows: 256
   cellSpacing: {x: 2, y: 2}
-  gridOrigin: {x: -16, y: -10, z: 0}
+  gridOrigin: {x: -32, y: -10, z: 0}
   circleRadius: 0.3
   circleSprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   sortingOrder: 5
