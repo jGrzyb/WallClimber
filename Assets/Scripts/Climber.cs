@@ -45,21 +45,15 @@ public class Climber : Agent
     [Header("Rewards")]
     [Tooltip("Strain (sum of joint reaction forces) above which penalty applies. Env param: 'strain_threshold'.")]
     [SerializeField] private float strainThreshold = 5000f;
-    [Tooltip("Penalty multiplier per unit of excess strain. Env param: 'strain_penalty_scale'.")]
+    [Tooltip("Penalty multiplier per unit of excess strain.")]
     [SerializeField] private float strainPenaltyScale = 1e-5f;
-    [Tooltip("Y position below which the agent is considered to have fallen. Env param: 'fall_y_threshold'.")]
+    [Tooltip("Y position below which the agent is considered to have fallen.")]
     [SerializeField] private float fallYThreshold = -10f;
-    [Tooltip("Negative reward applied on fall. Env param: 'fall_penalty'.")]
+    [Tooltip("Negative reward applied on fall.")]
     [SerializeField] private float fallPenalty = 1f;
 
-    [Tooltip("0 = velocity reward (default), 1 = position reward. Env param: 'reward_mode'.")]
-    [SerializeField] private int rewardMode = 0;
-    [Tooltip("Scale applied to linearVelocityY per step (mode 0). Env param: 'velocity_reward_scale'.")]
+    [Tooltip("Scale applied to linearVelocityY per step.")]
     [SerializeField] private float velocityRewardScale = 1e-3f;
-    [Tooltip("Scale applied to clamped Y position per step (mode 1). Env param: 'position_reward_scale'.")]
-    [SerializeField] private float positionRewardScale = 1e-3f;
-    [Tooltip("Y position cap before position reward scaling (mode 1). Env param: 'position_height_cap'.")]
-    [SerializeField] private float positionHeightCap = 50f;
 
     [Header("Debug")]
     [SerializeField] private int logInterval = 1000;
@@ -78,6 +72,8 @@ public class Climber : Agent
         }
     }
 
+    string[] _gripStatNames;
+
     // ------------------------------------------------------------------ //
     // Lifecycle
     // ------------------------------------------------------------------ //
@@ -87,77 +83,23 @@ public class Climber : Agent
         initPos = transform.localPosition;
         initRot = transform.localRotation;
         if (vision == null) vision = GetComponent<ClimberVision>();
-        ApplyEnvironmentParameters();
-        RegisterEnvironmentParameterCallbacks();
+
+        _gripStatNames = new string[forearms.Length];
+        for (int i = 0; i < forearms.Length; i++)
+            _gripStatNames[i] = $"Climber/Gripping{i}";
     }
 
     public override void OnEpisodeBegin() => Reset();
 
     // ------------------------------------------------------------------ //
-    // Environment parameters from YAML
-    // ------------------------------------------------------------------ //
-
-    void ApplyEnvironmentParameters() {
-        var ep = Academy.Instance.EnvironmentParameters;
-
-        // DecisionRequester
-        var dr = GetComponent<DecisionRequester>();
-        if (dr != null) {
-            dr.DecisionPeriod = Mathf.Max(1, Mathf.RoundToInt(
-                ep.GetWithDefault("decision_period", dr.DecisionPeriod)));
-            dr.DecisionStep = Mathf.Clamp(
-                Mathf.RoundToInt(ep.GetWithDefault("decision_step", dr.DecisionStep)),
-                0, Mathf.Max(0, dr.DecisionPeriod - 1));
-            float tabd = ep.GetWithDefault(
-                "take_actions_between_decisions",
-                dr.TakeActionsBetweenDecisions ? 1f : 0f);
-            dr.TakeActionsBetweenDecisions = tabd >= 0.5f;
-        }
-
-        MaxStep = Mathf.Max(1, Mathf.RoundToInt(ep.GetWithDefault("agent_max_step", MaxStep)));
-
-        // Motor
-        motorMultiplier = ep.GetWithDefault("motor_multiplier", motorMultiplier);
-
-        // Reward shaping
-        strainThreshold    = ep.GetWithDefault("strain_threshold",    strainThreshold);
-        strainPenaltyScale = ep.GetWithDefault("strain_penalty_scale", strainPenaltyScale);
-        fallYThreshold     = ep.GetWithDefault("fall_y_threshold",     fallYThreshold);
-        fallPenalty        = ep.GetWithDefault("fall_penalty",         fallPenalty);
-
-        // Reward mode
-        rewardMode           = Mathf.RoundToInt(ep.GetWithDefault("reward_mode",            rewardMode));
-        velocityRewardScale  = ep.GetWithDefault("velocity_reward_scale", velocityRewardScale);
-        positionRewardScale  = ep.GetWithDefault("position_reward_scale", positionRewardScale);
-        positionHeightCap    = ep.GetWithDefault("position_height_cap",   positionHeightCap);
-    }
-
-    void RegisterEnvironmentParameterCallbacks() {
-        var ep = Academy.Instance.EnvironmentParameters;
-        void OnChange(float _) => ApplyEnvironmentParameters();
-        ep.RegisterCallback("decision_period",               OnChange);
-        ep.RegisterCallback("decision_step",                 OnChange);
-        ep.RegisterCallback("take_actions_between_decisions", OnChange);
-        ep.RegisterCallback("agent_max_step",                OnChange);
-        ep.RegisterCallback("motor_multiplier",              OnChange);
-        ep.RegisterCallback("strain_threshold",              OnChange);
-        ep.RegisterCallback("strain_penalty_scale",          OnChange);
-        ep.RegisterCallback("fall_y_threshold",              OnChange);
-        ep.RegisterCallback("fall_penalty",                  OnChange);
-        ep.RegisterCallback("reward_mode",                   OnChange);
-        ep.RegisterCallback("velocity_reward_scale",         OnChange);
-        ep.RegisterCallback("position_reward_scale",         OnChange);
-        ep.RegisterCallback("position_height_cap",           OnChange);
-    }
-
-    // ------------------------------------------------------------------ //
-    // Observations  (N=2 → 10 proprioception + 32 vision = 42 total)
+    // Observations
     // ------------------------------------------------------------------ //
 
     public override void CollectObservations(VectorSensor sensor) {
         foreach (var a in arms)     sensor.AddObservation(a.Angle);
         foreach (var f in forearms) sensor.AddObservation(f.Angle);
         foreach (var f in forearms) sensor.AddObservation(f.IsGripping ? 1f : 0f);
+        foreach (var f in forearms) sensor.AddObservation(f.CanGrip ? 1f : 0f);
         sensor.AddObservation(rb.linearVelocity);
         sensor.AddObservation(rb.angularVelocity);
         sensor.AddObservation(transform.rotation.eulerAngles.z);
@@ -181,7 +123,6 @@ public class Climber : Agent
             forearms[i].SetGrip(disc[i] == 1);
 
         HandleReward();
-        RecordStats();
         HandleLogging();
     }
 
@@ -210,14 +151,8 @@ public class Climber : Agent
     // ------------------------------------------------------------------ //
 
     void HandleReward() {
-        if (rewardMode == 1) {
-            // Position reward: higher Y = more reward each step.
-            float h = Mathf.Clamp(transform.position.y, 0f, positionHeightCap);
-            AddReward(h * positionRewardScale);
-        } else {
-            // Velocity reward (default): reward upward movement.
-            AddReward(rb.linearVelocityY * velocityRewardScale);
-        }
+        // Velocity reward: reward upward movement.
+        AddReward(rb.linearVelocityY * velocityRewardScale);
 
         if (transform.position.y < fallYThreshold) {
             AddReward(-fallPenalty);
@@ -241,13 +176,14 @@ public class Climber : Agent
         stats.Add("Climber/VelocityX",   rb.linearVelocityX);
         stats.Add("Climber/Strain",      strain);
         for (int i = 0; i < forearms.Length; i++)
-            stats.Add($"Climber/Gripping{i}", forearms[i].IsGripping ? 1f : 0f);
+            stats.Add(_gripStatNames[i], forearms[i].IsGripping ? 1f : 0f);
     }
 
     void HandleLogging() {
         var step = Academy.Instance.TotalStepCount;
         if (step - _lastLogStep < logInterval) return;
         _lastLogStep = step;
+        RecordStats(); // Only record telemetry occasionally to save MBs of RAM
         Debug.Log($"[Climber] Step {step:N0} | Episode {CompletedEpisodes} | Reward {GetCumulativeReward():F4}");
     }
 

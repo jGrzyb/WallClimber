@@ -4,30 +4,9 @@ using UnityEngine;
 
 /// <summary>
 /// Angular-bin 2D vision sensor for the Climber agent.
-///
-/// HOW IT WORKS
-/// ─────────────
-/// The full 360° around the agent is divided into <see cref="rayCount"/> equal angular bins.
-/// Each frame, every active GripPoint is measured:
-///   • If it is within <see cref="viewRange"/>, its polar angle determines which bin it occupies.
-///   • The bin's observation value is set to   dist / viewRange   (0 = at the agent, 1 = at range edge).
-///   • When multiple grips fall in the same bin, only the closest one is recorded.
-///   • Bins with no grip in range keep the value 0.
-///
-/// The resulting float[] of length <see cref="rayCount"/> is appended to the agent's VectorSensor
-/// via <see cref="CollectVisionObservations"/>.
-///
-/// GIZMOS (always visible in Scene view)
-/// ────────────────────────────────────
-///   Green ring        : the view range boundary.
-///   Faint green spokes: bin boundaries showing the angular resolution.
-///   Coloured lines    : visible grips (red = close → yellow = far edge of range).
-///                       Only drawn during Play mode once observations have been collected.
 /// </summary>
 public class ClimberVision : MonoBehaviour
 {
-    // ── Inspector ────────────────────────────────────────────────────────────
-
     [Tooltip("Number of angular bins that span 360°. Must match the delta added to VectorObservationSize.")]
     [SerializeField] private int rayCount = 32;
 
@@ -37,41 +16,42 @@ public class ClimberVision : MonoBehaviour
     [Tooltip("Draw thin spokes in the Scene view showing where each bin boundary lies.")]
     [SerializeField] private bool showBinDividers = true;
 
-    // ── Public API ───────────────────────────────────────────────────────────
-
-    /// <summary>Number of floats this sensor adds to the VectorSensor.</summary>
     public int ObservationCount => rayCount;
 
-    /// <summary>
-    /// Appends <see cref="rayCount"/> floats to <paramref name="sensor"/>.
-    /// Call this from <c>Agent.CollectObservations</c>.
-    /// </summary>
+    // ── Internal state ───────────────────────────────────────────────────────
+    private float[] _bins;
+    private float _lastRefreshTime = -1f;
+
+#if UNITY_EDITOR
+    // Slower tracked list only exists and allocates when inside the Unity Editor for Gizmos
+    private readonly List<(Vector2 pos, float normDist)> _visible = new();
+#endif
+
     public void CollectVisionObservations(VectorSensor sensor)
     {
         EnsureRefreshed();
-        foreach (var v in _bins)
-            sensor.AddObservation(v);
+        // Since we know the exact size, a standard for-loop is slightly faster than foreach
+        for (int i = 0; i < rayCount; i++)
+        {
+            sensor.AddObservation(_bins[i]);
+        }
     }
 
-    // ── Internal state ───────────────────────────────────────────────────────
-
-    private float[] _bins;
-
-    // All GripPoints currently inside viewRange — used only for gizmo drawing.
-    private readonly List<(Vector2 pos, float normDist)> _visible = new();
-
-    private int _lastRefreshFrame = -1;
-
-    // ── Unity messages ───────────────────────────────────────────────────────
-
-    private void LateUpdate() => EnsureRefreshed();
-
-    // ── Core logic ───────────────────────────────────────────────────────────
+#if UNITY_EDITOR
+    private void FixedUpdate()
+    {
+        // Only run here if we want Gizmos to look smooth in the editor while playing.
+        // Otherwise, it gets executed exactly when ML-agents requests it.
+        if (showBinDividers)
+            EnsureRefreshed();
+    }
+#endif
 
     private void EnsureRefreshed()
     {
-        if (Time.frameCount == _lastRefreshFrame) return;
-        _lastRefreshFrame = Time.frameCount;
+        // Tie refresh to physics time, as ML-agents steps on physics frames
+        if (Mathf.Approximately(Time.fixedTime, _lastRefreshTime)) return;
+        _lastRefreshTime = Time.fixedTime;
         RefreshBins();
     }
 
@@ -82,24 +62,49 @@ public class ClimberVision : MonoBehaviour
         else
             System.Array.Clear(_bins, 0, rayCount);
 
+#if UNITY_EDITOR
         _visible.Clear();
+#endif
+        var origin = (Vector2)transform.position;
 
-        var origin    = (Vector2)transform.position;
-        var binAngle  = 360f / rayCount;      // degrees per bin
+        // Caching values natively speeds up the inner loop
+        float viewRangeSqr = viewRange * viewRange;
+        float invViewRange = 1f / viewRange; 
+        float invBinAngle  = rayCount / 360f; // Multiplying by this is same as dividing by (360/rayCount)
 
-        foreach (var gp in GripPoint.ActiveGrips)
+        using var _ = UnityEngine.Pool.ListPool<GripPoint>.Get(out List<GripPoint> nearbyGrips);
+        GripPoint.GetGripsInRadius(origin, viewRange, nearbyGrips); 
+
+        // Iterator runs over ONLY grips mathematically inside the chunk boundaries 
+        // Eliminates analyzing the remaining 95% of world scale points.
+        int gripCount = nearbyGrips.Count;
+        for (int i = 0; i < gripCount; i++)
         {
-            var delta    = (Vector2)gp.transform.position - origin;
-            var dist     = delta.magnitude;
-            if (dist > viewRange || dist < 0.001f) continue;
+            var gp = nearbyGrips[i];
+            var pos = (Vector2)gp.transform.position; // Can be cached to lower Component lookup overhead!
+            var delta = pos - origin;
+            
+            // Optimization: Filter strictly by squared distance to avoid Math.Sqrt entirely
+            var sqrDist = delta.sqrMagnitude;
+            if (sqrDist > viewRangeSqr || sqrDist < 0.000001f) continue;
 
-            var normDist = dist / viewRange;
-            _visible.Add(((Vector2)gp.transform.position, normDist));
+            // Math.Sqrt is only evaluated for the ~5% of grips that are ACTUALLY near the agent
+            var dist = Mathf.Sqrt(sqrDist);
+            var normDist = dist * invViewRange;
+
+#if UNITY_EDITOR
+            if (showBinDividers)
+                _visible.Add((pos, normDist)); // 'pos' is used here implicitly from cache!
+#endif
 
             // Map world angle [0, 360) → bin index
             var angleDeg = Mathf.Atan2(delta.y, delta.x) * Mathf.Rad2Deg;
             if (angleDeg < 0f) angleDeg += 360f;
-            var bin = Mathf.Clamp(Mathf.FloorToInt(angleDeg / binAngle), 0, rayCount - 1);
+
+            // Direct int cast is faster than Mathf.FloorToInt. 
+            // Clamp is occasionally needed if angleDeg hits 360 exactly due to float imprecision.
+            var bin = (int)(angleDeg * invBinAngle);
+            if (bin >= rayCount) bin = rayCount - 1;
 
             // Closest grip per bin wins
             if (_bins[bin] == 0f || normDist < _bins[bin])
@@ -107,8 +112,8 @@ public class ClimberVision : MonoBehaviour
         }
     }
 
+#if UNITY_EDITOR
     // ── Gizmos ───────────────────────────────────────────────────────────────
-
     private void OnDrawGizmos()
     {
         DrawRangeCircle();
@@ -123,7 +128,7 @@ public class ClimberVision : MonoBehaviour
         var c = transform.position;
         for (var i = 0; i < segs; i++)
         {
-            var a0 = i       * (2f * Mathf.PI / segs);
+            var a0 = i * (2f * Mathf.PI / segs);
             var a1 = (i + 1) * (2f * Mathf.PI / segs);
             Gizmos.DrawLine(
                 c + new Vector3(Mathf.Cos(a0), Mathf.Sin(a0)) * viewRange,
@@ -147,9 +152,9 @@ public class ClimberVision : MonoBehaviour
     {
         foreach (var (pos, normDist) in _visible)
         {
-            // Red (close) → yellow (near range edge)
             Gizmos.color = Color.Lerp(new Color(1f, 0.25f, 0.1f), new Color(1f, 0.9f, 0.1f), normDist);
             Gizmos.DrawLine(transform.position, (Vector3)pos);
         }
     }
+#endif
 }

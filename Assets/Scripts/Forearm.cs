@@ -62,6 +62,17 @@ public class Forearm : Arm
         }
     }
 
+    public bool CanGrip
+    {
+        get
+        {
+            var hj = GripHinge;
+            if (hj == null) return false;
+            var handWorld = (Vector2)transform.TransformPoint(hj.anchor);
+            return GripPoint.TryFindBestForHand(handWorld, out _);
+        }
+    }
+
     public void SetGrip(bool isGripping)
     {
         if (!isGripping)

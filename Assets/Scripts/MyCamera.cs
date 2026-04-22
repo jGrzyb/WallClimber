@@ -41,6 +41,10 @@ public class MyCamera : MonoBehaviour
     void Awake()
     {
         _cam = GetComponent<Camera>();
+        // Hard-disable legacy OnMouse_ raycasting from this camera
+        // This instantly stops Unity's hidden SendMouseEvents from eating CPU 
+        // regardless of project settings or physics components.
+        _cam.eventMask = 0;
     }
 
     void Start()
