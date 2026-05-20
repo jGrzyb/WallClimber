@@ -1,0 +1,86 @@
+{
+    "agent_max_step": {
+        "lesson_num": 0
+    },
+    "decision_period": {
+        "lesson_num": 0
+    },
+    "decision_step": {
+        "lesson_num": 0
+    },
+    "fall_penalty": {
+        "lesson_num": 0
+    },
+    "fall_y_threshold": {
+        "lesson_num": 0
+    },
+    "motor_multiplier": {
+        "lesson_num": 0
+    },
+    "position_height_cap": {
+        "lesson_num": 0
+    },
+    "position_reward_scale": {
+        "lesson_num": 0
+    },
+    "reward_mode": {
+        "lesson_num": 0
+    },
+    "strain_penalty_scale": {
+        "lesson_num": 0
+    },
+    "strain_threshold": {
+        "lesson_num": 0
+    },
+    "take_actions_between_decisions": {
+        "lesson_num": 0
+    },
+    "velocity_reward_scale": {
+        "lesson_num": 0
+    },
+    "Climber": {
+        "checkpoints": [
+            {
+                "steps": 499000,
+                "file_path": "results\\CustomClimber4LimbsPosition\\Climber\\Climber-499000.onnx",
+                "reward": null,
+                "creation_time": 1776010670.6271849,
+                "auxillary_file_paths": [
+                    "results\\CustomClimber4LimbsPosition\\Climber\\Climber-499000.pt"
+                ]
+            },
+            {
+                "steps": 999000,
+                "file_path": "results\\CustomClimber4LimbsPosition\\Climber\\Climber-999000.onnx",
+                "reward": null,
+                "creation_time": 1776016437.7731872,
+                "auxillary_file_paths": [
+                    "results\\CustomClimber4LimbsPosition\\Climber\\Climber-999000.pt"
+                ]
+            },
+            {
+                "steps": 1001000,
+                "file_path": "results\\CustomClimber4LimbsPosition\\Climber\\Climber-1001000.onnx",
+                "reward": 99.60234451293945,
+                "creation_time": 1776016449.7056499,
+                "auxillary_file_paths": [
+                    "results\\CustomClimber4LimbsPosition\\Climber\\Climber-1001000.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 1001000,
+            "file_path": "results\\CustomClimber4LimbsPosition\\Climber.onnx",
+            "reward": 99.60234451293945,
+            "creation_time": 1776016449.7056499,
+            "auxillary_file_paths": [
+                "results\\CustomClimber4LimbsPosition\\Climber\\Climber-1001000.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.7.1+cu118"
+    }
+}

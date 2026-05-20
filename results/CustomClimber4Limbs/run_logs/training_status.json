@@ -1,0 +1,65 @@
+{
+    "decision_period": {
+        "lesson_num": 0
+    },
+    "decision_step": {
+        "lesson_num": 0
+    },
+    "take_actions_between_decisions": {
+        "lesson_num": 0
+    },
+    "agent_max_step": {
+        "lesson_num": 0
+    },
+    "motor_multiplier": {
+        "lesson_num": 0
+    },
+    "strain_threshold": {
+        "lesson_num": 0
+    },
+    "strain_penalty_scale": {
+        "lesson_num": 0
+    },
+    "fall_y_threshold": {
+        "lesson_num": 0
+    },
+    "fall_penalty": {
+        "lesson_num": 0
+    },
+    "Climber": {
+        "checkpoints": [
+            {
+                "steps": 499000,
+                "file_path": "results\\CustomClimber4Limbs\\Climber\\Climber-499000.onnx",
+                "reward": null,
+                "creation_time": 1775994282.3262398,
+                "auxillary_file_paths": [
+                    "results\\CustomClimber4Limbs\\Climber\\Climber-499000.pt"
+                ]
+            },
+            {
+                "steps": 501000,
+                "file_path": "results\\CustomClimber4Limbs\\Climber\\Climber-501000.onnx",
+                "reward": 0.23087104596197605,
+                "creation_time": 1775994293.238186,
+                "auxillary_file_paths": [
+                    "results\\CustomClimber4Limbs\\Climber\\Climber-501000.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 501000,
+            "file_path": "results\\CustomClimber4Limbs\\Climber.onnx",
+            "reward": 0.23087104596197605,
+            "creation_time": 1775994293.238186,
+            "auxillary_file_paths": [
+                "results\\CustomClimber4Limbs\\Climber\\Climber-501000.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.7.1+cu118"
+    }
+}

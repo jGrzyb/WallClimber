@@ -2335,6 +2335,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 894c5aa4b26538dc68d8a4b92e2fddb7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MyCamera
+  mode: 0
+  framingPadding: 14
   offsetY: 2
   followSpeed: 10
   grid: {fileID: 6649730553474208122}

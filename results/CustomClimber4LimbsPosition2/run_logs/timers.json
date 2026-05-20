@@ -1,0 +1,572 @@
+{
+    "name": "root",
+    "gauges": {
+        "Climber.Policy.Entropy.mean": {
+            "value": 2.525824546813965,
+            "min": 2.121274471282959,
+            "max": 4.066173076629639,
+            "count": 3000
+        },
+        "Climber.Policy.Entropy.sum": {
+            "value": 2525.824462890625,
+            "min": 2121.2744140625,
+            "max": 6397.859375,
+            "count": 3000
+        },
+        "Climber.Climber.Height.mean": {
+            "value": 6.5588227060437205,
+            "min": -1.3922371884584428,
+            "max": 74.44792753601074,
+            "count": 3000
+        },
+        "Climber.Climber.Height.sum": {
+            "value": 13117.64541208744,
+            "min": -2784.4743769168854,
+            "max": 148895.85507202148,
+            "count": 3000
+        },
+        "Climber.Climber.VelocityY.mean": {
+            "value": 0.022938556896639057,
+            "min": -0.6438603360997512,
+            "max": 0.759030552796321,
+            "count": 3000
+        },
+        "Climber.Climber.VelocityY.sum": {
+            "value": 45.87711379327811,
+            "min": -1287.7206721995026,
+            "max": 1518.061105592642,
+            "count": 3000
+        },
+        "Climber.Climber.VelocityX.mean": {
+            "value": 0.18176088171475566,
+            "min": -0.5282600390682928,
+            "max": 0.5038315461104503,
+            "count": 3000
+        },
+        "Climber.Climber.VelocityX.sum": {
+            "value": 363.52176342951134,
+            "min": -1056.5200781365857,
+            "max": 1007.6630922209006,
+            "count": 3000
+        },
+        "Climber.Climber.Strain.mean": {
+            "value": 692.6707771072388,
+            "min": 117.00579633522034,
+            "max": 1214.2192231559754,
+            "count": 3000
+        },
+        "Climber.Climber.Strain.sum": {
+            "value": 1385341.5542144775,
+            "min": 234011.59267044067,
+            "max": 2944555.604663849,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping0.mean": {
+            "value": 0.315,
+            "min": 0.0,
+            "max": 0.6305,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping0.sum": {
+            "value": 630.0,
+            "min": 0.0,
+            "max": 1261.0,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping1.mean": {
+            "value": 0.3705,
+            "min": 0.0,
+            "max": 0.894,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping1.sum": {
+            "value": 741.0,
+            "min": 0.0,
+            "max": 2060.0,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping2.mean": {
+            "value": 0.213,
+            "min": 0.0,
+            "max": 0.9625,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping2.sum": {
+            "value": 426.0,
+            "min": 0.0,
+            "max": 1925.0,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping3.mean": {
+            "value": 0.302,
+            "min": 0.0,
+            "max": 0.547,
+            "count": 3000
+        },
+        "Climber.Climber.Gripping3.sum": {
+            "value": 604.0,
+            "min": 0.0,
+            "max": 1321.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.agent_max_step.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.agent_max_step.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.decision_period.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.decision_period.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.decision_step.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.decision_step.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.fall_penalty.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.fall_penalty.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.fall_y_threshold.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.fall_y_threshold.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.motor_multiplier.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.motor_multiplier.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.position_height_cap.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.position_height_cap.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.position_reward_scale.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.position_reward_scale.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.reward_mode.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.reward_mode.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.strain_penalty_scale.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.strain_penalty_scale.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.strain_threshold.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.strain_threshold.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.take_actions_between_decisions.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.take_actions_between_decisions.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.velocity_reward_scale.mean": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Environment.LessonNumber.velocity_reward_scale.sum": {
+            "value": 0.0,
+            "min": 0.0,
+            "max": 0.0,
+            "count": 3000
+        },
+        "Climber.Step.mean": {
+            "value": 3000000.0,
+            "min": 1000.0,
+            "max": 3000000.0,
+            "count": 3000
+        },
+        "Climber.Step.sum": {
+            "value": 3000000.0,
+            "min": 1000.0,
+            "max": 3000000.0,
+            "count": 3000
+        },
+        "Climber.Policy.ExtrinsicValueEstimate.mean": {
+            "value": 7.582952976226807,
+            "min": 1.114927887916565,
+            "max": 8.086716651916504,
+            "count": 3000
+        },
+        "Climber.Policy.ExtrinsicValueEstimate.sum": {
+            "value": 7.582952976226807,
+            "min": 1.114927887916565,
+            "max": 8.086716651916504,
+            "count": 3000
+        },
+        "Climber.IsTraining.mean": {
+            "value": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "count": 3000
+        },
+        "Climber.IsTraining.sum": {
+            "value": 1.0,
+            "min": 1.0,
+            "max": 1.0,
+            "count": 3000
+        },
+        "Climber.Environment.EpisodeLength.mean": {
+            "value": 4999.0,
+            "min": 4999.0,
+            "max": 4999.0,
+            "count": 600
+        },
+        "Climber.Environment.EpisodeLength.sum": {
+            "value": 4999.0,
+            "min": 4999.0,
+            "max": 4999.0,
+            "count": 600
+        },
+        "Climber.Environment.CumulativeReward.mean": {
+            "value": 233.96538543701172,
+            "min": 1.4557750225067139,
+            "max": 440.8168125152588,
+            "count": 600
+        },
+        "Climber.Environment.CumulativeReward.sum": {
+            "value": 233.96538543701172,
+            "min": 1.4557750225067139,
+            "max": 440.8168125152588,
+            "count": 600
+        },
+        "Climber.Policy.ExtrinsicReward.mean": {
+            "value": 233.96538543701172,
+            "min": 1.4557750225067139,
+            "max": 440.8168125152588,
+            "count": 600
+        },
+        "Climber.Policy.ExtrinsicReward.sum": {
+            "value": 233.96538543701172,
+            "min": 1.4557750225067139,
+            "max": 440.8168125152588,
+            "count": 600
+        },
+        "Climber.Losses.PolicyLoss.mean": {
+            "value": 0.018885602404770906,
+            "min": 0.016429633612278848,
+            "max": 0.03295107633603038,
+            "count": 333
+        },
+        "Climber.Losses.PolicyLoss.sum": {
+            "value": 0.018885602404770906,
+            "min": 0.016429633612278848,
+            "max": 0.03295107633603038,
+            "count": 333
+        },
+        "Climber.Losses.ValueLoss.mean": {
+            "value": 0.26742312535643575,
+            "min": 0.002903415626497008,
+            "max": 0.6939896747469902,
+            "count": 333
+        },
+        "Climber.Losses.ValueLoss.sum": {
+            "value": 0.26742312535643575,
+            "min": 0.002903415626497008,
+            "max": 0.6939896747469902,
+            "count": 333
+        },
+        "Climber.Policy.LearningRate.mean": {
+            "value": 1.0000999000000009e-06,
+            "min": 1.0000999000000009e-06,
+            "max": 0.0009970000003,
+            "count": 333
+        },
+        "Climber.Policy.LearningRate.sum": {
+            "value": 1.0000999000000009e-06,
+            "min": 1.0000999000000009e-06,
+            "max": 0.0009970000003,
+            "count": 333
+        },
+        "Climber.Policy.Epsilon.mean": {
+            "value": 0.10010000000000001,
+            "min": 0.10010000000000001,
+            "max": 0.19970000000000002,
+            "count": 333
+        },
+        "Climber.Policy.Epsilon.sum": {
+            "value": 0.10010000000000001,
+            "min": 0.10010000000000001,
+            "max": 0.19970000000000002,
+            "count": 333
+        },
+        "Climber.Policy.Beta.mean": {
+            "value": 1.4990000000000007e-05,
+            "min": 1.4990000000000007e-05,
+            "max": 0.00498503,
+            "count": 333
+        },
+        "Climber.Policy.Beta.sum": {
+            "value": 1.4990000000000007e-05,
+            "min": 1.4990000000000007e-05,
+            "max": 0.00498503,
+            "count": 333
+        }
+    },
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1776026930",
+        "python_version": "3.11.14 (main, Dec  9 2025, 18:59:10) [MSC v.1944 64 bit (AMD64)]",
+        "command_line_arguments": "train.py C:\\Users\\piotr\\AppData\\Local\\Temp\\wallclimber_74h4igdy.yaml --run-id=CustomClimber4LimbsPosition2 --force --initialize-from=CustomClimber4LimbsPosition --torch-device=cuda",
+        "mlagents_version": "1.1.0",
+        "mlagents_envs_version": "1.1.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "2.7.1+cu118",
+        "numpy_version": "1.23.5",
+        "end_time_seconds": "1776059772"
+    },
+    "total": 32842.87666519999,
+    "count": 1,
+    "self": 0.00936540006659925,
+    "children": {
+        "run_training.setup": {
+            "total": 0.0842362999683246,
+            "count": 1,
+            "self": 0.0842362999683246
+        },
+        "TrainerController.start_learning": {
+            "total": 32842.783063499955,
+            "count": 1,
+            "self": 67.70687390014064,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 10.378323099925183,
+                    "count": 1,
+                    "self": 10.378323099925183
+                },
+                "TrainerController.advance": {
+                    "total": 32764.507241999847,
+                    "count": 3001000,
+                    "self": 117.86556628230028,
+                    "children": {
+                        "env_step": {
+                            "total": 31123.31394290412,
+                            "count": 3001000,
+                            "self": 11954.310215715203,
+                            "children": {
+                                "SubprocessEnvManager._take_step": {
+                                    "total": 19149.220094209886,
+                                    "count": 3001000,
+                                    "self": 108.2808032828616,
+                                    "children": {
+                                        "TorchPolicy.evaluate": {
+                                            "total": 19040.939290927025,
+                                            "count": 3001000,
+                                            "self": 19040.939290927025
+                                        }
+                                    }
+                                },
+                                "workers": {
+                                    "total": 19.78363297902979,
+                                    "count": 3001000,
+                                    "self": 0.0,
+                                    "children": {
+                                        "worker_root": {
+                                            "total": 32776.82361280953,
+                                            "count": 3001000,
+                                            "is_parallel": true,
+                                            "self": 22832.34649102972,
+                                            "children": {
+                                                "steps_from_proto": {
+                                                    "total": 0.0002770000137388706,
+                                                    "count": 1,
+                                                    "is_parallel": true,
+                                                    "self": 0.00016220007091760635,
+                                                    "children": {
+                                                        "_process_rank_one_or_two_observation": {
+                                                            "total": 0.00011479994282126427,
+                                                            "count": 2,
+                                                            "is_parallel": true,
+                                                            "self": 0.00011479994282126427
+                                                        }
+                                                    }
+                                                },
+                                                "UnityEnvironment.step": {
+                                                    "total": 9944.476844779798,
+                                                    "count": 3001000,
+                                                    "is_parallel": true,
+                                                    "self": 357.55576933489647,
+                                                    "children": {
+                                                        "UnityEnvironment._generate_step_input": {
+                                                            "total": 314.8386779751163,
+                                                            "count": 3001000,
+                                                            "is_parallel": true,
+                                                            "self": 314.8386779751163
+                                                        },
+                                                        "communicator.exchange": {
+                                                            "total": 8795.722613234655,
+                                                            "count": 3001000,
+                                                            "is_parallel": true,
+                                                            "self": 8795.722613234655
+                                                        },
+                                                        "steps_from_proto": {
+                                                            "total": 476.35978423513006,
+                                                            "count": 3001000,
+                                                            "is_parallel": true,
+                                                            "self": 307.307953827898,
+                                                            "children": {
+                                                                "_process_rank_one_or_two_observation": {
+                                                                    "total": 169.05183040723205,
+                                                                    "count": 6002000,
+                                                                    "is_parallel": true,
+                                                                    "self": 169.05183040723205
+                                                                }
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        "trainer_advance": {
+                            "total": 1523.3277328134282,
+                            "count": 3001000,
+                            "self": 45.6892901561223,
+                            "children": {
+                                "process_trajectory": {
+                                    "total": 211.09692855691537,
+                                    "count": 3001000,
+                                    "self": 209.93555325688794,
+                                    "children": {
+                                        "RLTrainer._checkpoint": {
+                                            "total": 1.16137530002743,
+                                            "count": 6,
+                                            "self": 1.16137530002743
+                                        }
+                                    }
+                                },
+                                "_update_policy": {
+                                    "total": 1266.5415141003905,
+                                    "count": 333,
+                                    "self": 378.3057336030761,
+                                    "children": {
+                                        "TorchPPOOptimizer.update": {
+                                            "total": 888.2357804973144,
+                                            "count": 13320,
+                                            "self": 888.2357804973144
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "trainer_threads": {
+                    "total": 7.00005330145359e-07,
+                    "count": 1,
+                    "self": 7.00005330145359e-07
+                },
+                "TrainerController._save_models": {
+                    "total": 0.19062380003742874,
+                    "count": 1,
+                    "self": 0.0014179000863805413,
+                    "children": {
+                        "RLTrainer._checkpoint": {
+                            "total": 0.1892058999510482,
+                            "count": 1,
+                            "self": 0.1892058999510482
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

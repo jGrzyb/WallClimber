@@ -1,0 +1,65 @@
+{
+    "Climber": {
+        "checkpoints": [
+            {
+                "steps": 4999826,
+                "file_path": "results/vibe/Climber/Climber-4999826.onnx",
+                "reward": 0.659447465624128,
+                "creation_time": 1776887163.3192744,
+                "auxillary_file_paths": [
+                    "results/vibe/Climber/Climber-4999826.pt"
+                ]
+            },
+            {
+                "steps": 5499232,
+                "file_path": "results/vibe/Climber/Climber-5499232.onnx",
+                "reward": 0.509555459022522,
+                "creation_time": 1776887850.3557742,
+                "auxillary_file_paths": [
+                    "results/vibe/Climber/Climber-5499232.pt"
+                ]
+            },
+            {
+                "steps": 5999158,
+                "file_path": "results/vibe/Climber/Climber-5999158.onnx",
+                "reward": 0.6994707551267412,
+                "creation_time": 1776888543.278998,
+                "auxillary_file_paths": [
+                    "results/vibe/Climber/Climber-5999158.pt"
+                ]
+            },
+            {
+                "steps": 6499408,
+                "file_path": "results/vibe/Climber/Climber-6499408.onnx",
+                "reward": 0.7381783957992282,
+                "creation_time": 1776889231.2476034,
+                "auxillary_file_paths": [
+                    "results/vibe/Climber/Climber-6499408.pt"
+                ]
+            },
+            {
+                "steps": 6943855,
+                "file_path": "results/vibe/Climber/Climber-6943855.onnx",
+                "reward": 0.4995819926261902,
+                "creation_time": 1776889841.6707566,
+                "auxillary_file_paths": [
+                    "results/vibe/Climber/Climber-6943855.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 6943855,
+            "file_path": "results/vibe/Climber.onnx",
+            "reward": 0.4995819926261902,
+            "creation_time": 1776889841.6707566,
+            "auxillary_file_paths": [
+                "results/vibe/Climber/Climber-6943855.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.11.0+cu130"
+    }
+}
