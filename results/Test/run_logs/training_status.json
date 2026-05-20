@@ -1,0 +1,65 @@
+{
+    "Climber": {
+        "checkpoints": [
+            {
+                "steps": 8499876,
+                "file_path": "results\\Test\\Climber\\Climber-8499876.onnx",
+                "reward": 15.612297932306925,
+                "creation_time": 1778641458.930837,
+                "auxillary_file_paths": [
+                    "results\\Test\\Climber\\Climber-8499876.pt"
+                ]
+            },
+            {
+                "steps": 8999380,
+                "file_path": "results\\Test\\Climber\\Climber-8999380.onnx",
+                "reward": 16.41882266998291,
+                "creation_time": 1778643973.3284898,
+                "auxillary_file_paths": [
+                    "results\\Test\\Climber\\Climber-8999380.pt"
+                ]
+            },
+            {
+                "steps": 9499626,
+                "file_path": "results\\Test\\Climber\\Climber-9499626.onnx",
+                "reward": 20.975589752197266,
+                "creation_time": 1778646773.358882,
+                "auxillary_file_paths": [
+                    "results\\Test\\Climber\\Climber-9499626.pt"
+                ]
+            },
+            {
+                "steps": 9999604,
+                "file_path": "results\\Test\\Climber\\Climber-9999604.onnx",
+                "reward": 17.882657457800473,
+                "creation_time": 1778649426.6982942,
+                "auxillary_file_paths": [
+                    "results\\Test\\Climber\\Climber-9999604.pt"
+                ]
+            },
+            {
+                "steps": 10000604,
+                "file_path": "results\\Test\\Climber\\Climber-10000604.onnx",
+                "reward": 17.831046647495693,
+                "creation_time": 1778649426.893649,
+                "auxillary_file_paths": [
+                    "results\\Test\\Climber\\Climber-10000604.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 10000604,
+            "file_path": "results\\Test\\Climber.onnx",
+            "reward": 17.831046647495693,
+            "creation_time": 1778649426.893649,
+            "auxillary_file_paths": [
+                "results\\Test\\Climber\\Climber-10000604.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "1.1.0",
+        "torch_version": "2.7.1+cu118"
+    }
+}

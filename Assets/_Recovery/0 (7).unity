@@ -443,7 +443,7 @@ MonoBehaviour:
   rows: 40
   cellSpacing: {x: 2, y: 2}
   gridOrigin: {x: -16, y: 0, z: 0}
-  circleRadius: 0.25
+  circleRadius: 0.3
   circleSprite: {fileID: -2413806693520163455, guid: a86470a33a6bf42c4b3595704624658b, type: 3}
   sortingOrder: 5
 --- !u!1 &911926163
@@ -719,17 +719,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c8a9b0d1e2f3456789012345678abcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::WallClimberInferenceScene
---- !u!114 &1826944885 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9901234567890123, guid: 1128926b48c0b6630b5e4d70fd7c526a, type: 3}
-  m_PrefabInstance: {fileID: 1395738887946981951}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b1c2d3e4f5a64b8c90d1e2f3a4b5c6d7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ClimberVision
 --- !u!1001 &1883474997
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -799,10 +788,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Climber
       objectReference: {fileID: 0}
-    - target: {fileID: 458427530199788370, guid: 1128926b48c0b6630b5e4d70fd7c526a, type: 3}
-      propertyPath: vision
-      value: 
-      objectReference: {fileID: 1826944885}
     - target: {fileID: 782409230422138530, guid: 1128926b48c0b6630b5e4d70fd7c526a, type: 3}
       propertyPath: m_ConnectedAnchor.x
       value: 0.00000014702742
